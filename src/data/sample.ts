@@ -7,10 +7,7 @@ export const mods: Mod[] = [
         "multiplier": 1.5,
         "state": {
             "selected": false,
-            "condition": [{
-                state: false,
-                description: null
-            }]
+            "condition": []
         },
         "groupId": null
     },
@@ -22,10 +19,7 @@ export const mods: Mod[] = [
         "multiplier": 2,
         "state": {
             "selected": false,
-            "condition": [{
-                state: false,
-                description: null
-            }]
+            "condition": []
         },
         "groupId": null
     },
@@ -52,10 +46,7 @@ export const mods: Mod[] = [
         "multiplier": 0.6,
         "state": {
             "selected": false,
-            "condition": [{
-                state: false,
-                description: null
-            }]
+            "condition": []
         },
         "groupId": null
     }

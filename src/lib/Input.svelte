@@ -9,7 +9,7 @@
 
     function SelectMod(mod): void {
         const currentIndex = mods.findIndex(x => x.name == mod.name);
-        mods[currentIndex].state.selected = !mod.state.selected;
+        filteredMods[currentIndex].state.selected = !mod.state.selected;
 
         calculateCrit();
     }
@@ -74,6 +74,8 @@
 
         calculateCrit();
     }
+
+    console.log(mods);
 </script>
 
 <h4>Select Weapon Type</h4>
