@@ -1,14 +1,15 @@
 <script lang="ts">
     import {mods, weaponTypes} from '../data/sample';
 
-    export let filteredMods = mods;
     export let selectedWeapon = "rifle";
     export let isZephyr = false;
     export let calculatedCrit = 0;
     export let baseCrit = 30;
+    export let filteredMods = mods.filter((x) => x.type === selectedWeapon);
 
     function SelectMod(mod): void {
-        const currentIndex = mods.findIndex(x => x.name == mod.name);
+        const currentIndex = mods.findIndex(x => x.name === mod.name);
+        const groupIdChecker = checkGroupId(mod);
         filteredMods[currentIndex].state.selected = !mod.state.selected;
 
         calculateCrit();
@@ -17,6 +18,16 @@
     function SelectWeaponType(weaponType): void {
         selectedWeapon = weaponType;
         filteredMods = mods.filter((x) => x.state.selected || x.type === selectedWeapon);
+    }
+
+    function checkGroupId(mod) {
+        const filtered = mods.filter((x) => {
+            return x.groupId !== mod.groupId && mod.state.selected === true
+        })
+
+        console.log(filtered)
+
+        return filtered;
     }
 
     function roundToHundreds(equation: number): number {
@@ -41,7 +52,7 @@
                 // Calculate when there is conditions
                 if (cond.description) {
                     if (cond.state) {
-                        relativeMultiplier = relativeMultiplier + rm.multiplier;
+                        relativeMultiplier = relativeMultiplier + cond.multiplier;
                     }
                 } else {
                     relativeMultiplier = relativeMultiplier + rm.multiplier;
@@ -74,8 +85,6 @@
 
         calculateCrit();
     }
-
-    console.log(mods);
 </script>
 
 <h4>Select Weapon Type</h4>
@@ -88,7 +97,6 @@
     {#each filteredMods as mod}
         <button on:click={() => SelectMod(mod)} class:active={mod.state.selected}>{mod.name}</button>
         {#each mod.state.condition as condition}
-        <br />
         {#if condition.description && mod.state.selected}
             <label>
                 {condition.description}
@@ -96,6 +104,7 @@
             </label>
         {/if}
         {/each}
+        <br />
         <br />
     {/each}
 {/key}
@@ -114,6 +123,8 @@
 
 <h4>Calculated Crit %</h4>
 <p>{calculatedCrit}%</p>
+
+
 <style>
     .active {
         background: green;
