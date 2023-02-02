@@ -16,7 +16,7 @@
 
     function SelectWeaponType(weaponType): void {
         selectedWeapon = weaponType;
-        filteredMods = mods.filter((x) => x.type === selectedWeapon);
+        filteredMods = mods.filter((x) => x.state.selected || x.type === selectedWeapon);
     }
 
     function roundToHundreds(equation: number): number {
