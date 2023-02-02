@@ -1,15 +1,22 @@
 <script lang="ts">
-    import {data} from '../data/sample';
+    import {mods, weaponTypes} from '../data/sample';
 
+    export let filteredMods = mods;
+    export let selectedWeapon = "rifle";
     export let isZephyr = false;
     export let calculatedCrit = 0;
     export let baseCrit = 30;
 
-    export function SelectMod(mod): void {
-        const currentIndex = data.findIndex(x => x.name == mod.name);
-        data[currentIndex].state = !mod.state;
+    function SelectMod(mod): void {
+        const currentIndex = mods.findIndex(x => x.name == mod.name);
+        mods[currentIndex].state.selected = !mod.state.selected;
 
         calculateCrit();
+    }
+
+    function SelectWeaponType(weaponType): void {
+        selectedWeapon = weaponType;
+        filteredMods = mods.filter((x) => x.type === selectedWeapon);
     }
 
     function roundToHundreds(equation: number): number {
@@ -20,17 +27,27 @@
         calculatedCrit = 0;
         
         const baseCritAsPercentage = baseCrit / 100;
-        const selectedMods = data.filter(x => x.state === true);
+        const selectedMods = mods.filter(x => x.state.selected === true);
         const relativeMods = selectedMods.filter(x => x.mode === 'relative');
         const absoluteMods = selectedMods.filter(x => x.mode === 'absolute');
         const relativeBaseValue = 1;
-        console.log(isZephyr);
+
         let relativeMultiplier = 0;
         let absoluteMultiplier = 0
 
         // Relative Bonus calculated
         relativeMods.map((rm) => {
-            relativeMultiplier = relativeMultiplier + rm.multiplier;
+            rm.state.condition.map((cond) => {
+                // Calculate when there is conditions
+                if (cond.description) {
+                    if (cond.state) {
+                        relativeMultiplier = relativeMultiplier + rm.multiplier;
+                    }
+                } else {
+                    relativeMultiplier = relativeMultiplier + rm.multiplier;
+                }
+            })
+            
         });
 
         // Absolute Bonus calculated
@@ -47,22 +64,42 @@
         calculatedCrit = roundToHundreds(equation) * 100;
     }
 
-    function handleCheck() {
+    function handleZephyr(): void {
         isZephyr = !isZephyr;
         calculateCrit();
     }
     
+    function handleCondition(mod): void {
+        mod.state = !mod.state;
+
+        calculateCrit();
+    }
 </script>
 
+<h4>Select Weapon Type</h4>
+{#each weaponTypes as weapon}
+    <button on:click={() => SelectWeaponType(weapon)} class:active={weapon === selectedWeapon}>{weapon}</button>
+{/each}
+
 <h4>Pick your mods</h4>
-{#key data}
-    {#each data as mod}
-        <button on:click={() => SelectMod(mod)} class:active={mod.state}>{mod.name}</button>
+{#key filteredMods}
+    {#each filteredMods as mod}
+        <button on:click={() => SelectMod(mod)} class:active={mod.state.selected}>{mod.name}</button>
+        {#each mod.state.condition as condition}
+        <br />
+        {#if condition.description && mod.state.selected}
+            <label>
+                {condition.description}
+                <input type="checkbox" bind:checked={condition.state} on:click={() => handleCondition(condition)}>
+            </label>
+        {/if}
+        {/each}
+        <br />
     {/each}
 {/key}
 
 <label>
-	<input type="checkbox" bind:checked={isZephyr} on:click={handleCheck}>
+	<input type="checkbox" bind:checked={isZephyr} on:click={handleZephyr}>
 	Include Zephyr Crit Bonus
 </label>
 
