@@ -28,15 +28,112 @@ export const mods: Mod[] = [
         "mode": "relative",
         "name": "Argon Scope",
         "stats": [22.5, 45, 67.5, 90, 112.5, 135],
-        "multiplier": 1.35,
         "state": {
             "selected": false,
             "condition": [{
                 state: false,
+                "multiplier": 1.35,
                 description: "On Headshot gain Critical Strike"
             }]
         },
         "groupId": "scope"
+    },
+    {
+        "type": "rifle",
+        "mode": "relative",
+        "name": "Galvanized Scope",
+        "stats": [],
+        "minMultiplier": 1.2,
+        "maxMultiplier": 3.2,
+        "state": {
+            "selected": false,
+            "condition": [
+                {
+                    state: false,
+                    "multiplier": 1.2,
+                    description: "On Headshot gain Critical Strike"
+                },
+                {
+                    state: false,
+                    "multiplier": 2,
+                    description: "On Headshot kill gain Critical Strike"
+                }
+            ]
+        },
+        "groupId": "scope"
+    },
+    {
+        "type": "rifle",
+        "mode": "relative",
+        "name": "Proton Jet",
+        "stats": [],
+        "state": {
+            "selected": false,
+            "condition": [{
+                state: false,
+                "multiplier": 1.2,
+                description: "On Wall Latch gain Critical"
+            }]
+        },
+        "groupId": null
+    },
+    {
+        "type": "shotgun",
+        "mode": "relative",
+        "name": "Blunderbuss",
+        "stats": [],
+        "multiplier": 0.9,
+        "state": {
+            "selected": false,
+            "condition": []
+        },
+        "groupId": null
+    },
+    {
+        "type": "shotgun",
+        "mode": "relative",
+        "name": "Critical Deceleration",
+        "stats": [],
+        "multiplier": 2,
+        "state": {
+            "selected": false,
+            "condition": []
+        },
+        "groupId": null
+    },
+    {
+        "type": "shotgun",
+        "mode": "relative",
+        "name": "Laser Sight",
+        "stats": [],
+        "state": {
+            "selected": false,
+            "condition": [
+                {
+                    "state": false,
+                    "description": "On Headshot gain Critical Strike",
+                    "multiplier": 1.2
+                }
+            ]
+        },
+        "groupId": null
+    },
+    {
+        "type": "shotgun",
+        "mode": "relative",
+        "name": "Motus Setup",
+        "stats": [],
+        "state": {
+            "selected": false,
+            "condition": [
+                {
+                    "state": false,
+                    "description": "On Bullet or Double Jump gain Crit",
+                    "multiplier": 1
+                }
+            ]
+        },
+        "groupId": null
     },
     {
         "type": "buff",
@@ -57,7 +154,9 @@ interface Mod {
     mode: 'relative' | 'absolute';
     name: string;
     stats: number[];
-    multiplier: number;
+    multiplier?: number;
+    minMultiplier?: number;
+    maxMultiplier?: number;
     state: ModState;
     groupId: String;
 }
@@ -70,6 +169,7 @@ interface ModState {
 interface ConditionState {
     state: boolean;
     description: string | null;
+    multiplier: number;
   }
 
 export const weaponTypes: WeaponType[] = ["rifle", "shotgun", "pistol", "melee", "buff"]
