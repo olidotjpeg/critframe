@@ -22,6 +22,10 @@
     }
 
     function checkGroupId(mod: Mod, currentIndex: number): void {
+        if (!mod.groupId) {
+            return;
+        }
+
         if (mod.state.selected) {
             return;
         }
