@@ -149,7 +149,7 @@ export const mods: Mod[] = [
     }
 ];
 
-interface Mod {
+export interface Mod {
     type: WeaponType;
     mode: 'relative' | 'absolute';
     name: string;
@@ -158,7 +158,7 @@ interface Mod {
     minMultiplier?: number;
     maxMultiplier?: number;
     state: ModState;
-    groupId: String;
+    groupId: string;
 }
 
 interface ModState {

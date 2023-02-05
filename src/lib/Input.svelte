@@ -1,5 +1,6 @@
 <script lang="ts">
     import {mods, weaponTypes} from '../data/sample';
+    import type {Mod} from '../data/sample';
 
     export let selectedWeapon = "rifle";
     export let isZephyr = false;
@@ -9,7 +10,7 @@
 
     function SelectMod(mod): void {
         const currentIndex = mods.findIndex(x => x.name === mod.name);
-        const groupIdChecker = checkGroupId(mod);
+        checkGroupId(mod, currentIndex);
         filteredMods[currentIndex].state.selected = !mod.state.selected;
 
         calculateCrit();
@@ -20,14 +21,22 @@
         filteredMods = mods.filter((x) => x.state.selected || x.type === selectedWeapon);
     }
 
-    function checkGroupId(mod) {
-        const filtered = mods.filter((x) => {
-            return x.groupId !== mod.groupId && mod.state.selected === true
-        })
+    function checkGroupId(mod: Mod, currentIndex: number): void {
+        if (mod.state.selected) {
+            return;
+        }
+        
+        if (mod.groupId) {
+            const ids = new Set([mod.groupId]);
 
-        console.log(filtered)
-
-        return filtered;
+            filteredMods.forEach(el => {
+                if (ids.has(el.groupId)) {
+                    if (el.state.selected) {
+                        el.state.selected = !el.state.selected;
+                    }
+                }
+            });
+        }
     }
 
     function roundToHundreds(equation: number): number {
