@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import {mods, weaponTypes, type Mod, type ConditionState} from '../data/sample';
 
     export let selectedWeapon = "rifle";
@@ -6,6 +7,10 @@
     export let calculatedCrit = 0;
     export let baseCrit = 30;
     export let filteredMods: Mod[] = mods.filter((x) => x.type === selectedWeapon);
+
+    onMount(() => {
+        calculateCrit();
+    })
 
     function resetModsList() {
         mods.map((x) => {
@@ -141,7 +146,7 @@
 <br />
 
 <label>
-	<input type="text" bind:value={baseCrit}>
+	<input type="text" bind:value={baseCrit} on:blur={calculateCrit}>
 	What is your Base line Crit?
 </label>
 
