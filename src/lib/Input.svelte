@@ -95,6 +95,8 @@
             }
         });
 
+        console.log("Test");
+
         // Absolute Bonus calculated
         absoluteMods.map((rm) => {
             absoluteMultiplier = absoluteMultiplier + rm.multiplier;
