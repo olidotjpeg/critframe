@@ -32,5 +32,4 @@ module.exports = {
   settings: {
     'svelte3/typescript': true
   },
-  ignorePatterns: ["package.json", "src/main.ts", "vite.config.ts"]
 }
