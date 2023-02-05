@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import {mods, weaponTypes, type Mod, type ConditionState} from '../data/sample';
+    import {mods, weaponTypes, buffs, type Mod, type ConditionState} from '../data/sample';
 
     export let selectedWeapon = "rifle";
     export let isZephyr = false;
@@ -24,6 +24,13 @@
         const currentIndex = filteredMods.findIndex((x: Mod) => x.name === mod.name);
         checkGroupId(mod);
         filteredMods[currentIndex].state.selected = !mod.state.selected;
+
+        calculateCrit();
+    }
+
+    function selectBuff(mod: Mod): void {
+        const currentIndex = buffs.findIndex((x: Mod) => x.name === mod.name);
+        buffs[currentIndex].state.selected = !mod.state.selected;
 
         calculateCrit();
     }
@@ -63,7 +70,8 @@
         calculatedCrit = 0;
         
         const baseCritAsPercentage = baseCrit / 100;
-        const selectedMods = filteredMods.filter(x => x.state.selected === true);
+        const selectedMods = filteredMods.filter(x => x.state.selected);
+        const selectedBuffs = buffs.filter(x => x.state.selected);
         const relativeMods = selectedMods.filter(x => x.mode === 'relative');
         const absoluteMods = selectedMods.filter(x => x.mode === 'absolute');
         const relativeBaseValue = 1;
@@ -87,12 +95,16 @@
             }
         });
 
-        console.log(relativeMultiplier);
-
         // Absolute Bonus calculated
         absoluteMods.map((rm) => {
             absoluteMultiplier = absoluteMultiplier + rm.multiplier;
         });
+
+        if (selectedBuffs.length > 0) {
+            selectedBuffs.map((b) => {
+                relativeMultiplier = relativeMultiplier + b.multiplier;
+            })
+        }
 
         if (isZephyr) {
             relativeMultiplier = relativeMultiplier + 1.5;
@@ -136,6 +148,15 @@
         <br />
         <br />
     {/each}
+
+    <hr />
+
+    {#each buffs as buff}
+        <button on:click={() => selectBuff(buff)} class:active={buff.state.selected}>{buff.name}</button>
+    {/each}
+
+    <br />
+    <br />
 {/key}
 
 <label>

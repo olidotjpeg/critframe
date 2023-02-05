@@ -139,6 +139,9 @@ export const mods: Mod[] = [
 		},
 		groupId: null,
 	},
+];
+
+export const buffs: Mod[] = [
 	{
 		type: 'buff',
 		mode: 'absolute',
