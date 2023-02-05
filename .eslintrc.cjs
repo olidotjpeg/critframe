@@ -31,5 +31,6 @@ module.exports = {
   },
   settings: {
     'svelte3/typescript': true
-  }
+  },
+  ignorePatterns: ["package.json", "main.ts"]
 }
