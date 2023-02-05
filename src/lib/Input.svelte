@@ -1,27 +1,26 @@
 <script lang="ts">
-    import {mods, weaponTypes} from '../data/sample';
-    import type {Mod} from '../data/sample';
+    import {mods, weaponTypes, type Mod, type ConditionState} from '../data/sample';
 
     export let selectedWeapon = "rifle";
     export let isZephyr = false;
     export let calculatedCrit = 0;
     export let baseCrit = 30;
-    export let filteredMods = mods.filter((x) => x.type === selectedWeapon);
+    export let filteredMods: Mod[] = mods.filter((x) => x.type === selectedWeapon);
 
-    function SelectMod(mod): void {
-        const currentIndex = mods.findIndex(x => x.name === mod.name);
-        checkGroupId(mod, currentIndex);
+    function SelectMod(mod: Mod): void {
+        const currentIndex = mods.findIndex((x: Mod) => x.name === mod.name);
+        checkGroupId(mod);
         filteredMods[currentIndex].state.selected = !mod.state.selected;
 
         calculateCrit();
     }
 
-    function SelectWeaponType(weaponType): void {
+    function SelectWeaponType(weaponType: string): void {
         selectedWeapon = weaponType;
         filteredMods = mods.filter((x) => x.state.selected || x.type === selectedWeapon);
     }
 
-    function checkGroupId(mod: Mod, currentIndex: number): void {
+    function checkGroupId(mod: Mod): void {
         if (!mod.groupId) {
             return;
         }
@@ -93,8 +92,8 @@
         calculateCrit();
     }
     
-    function handleCondition(mod): void {
-        mod.state = !mod.state;
+    function handleCondition(condition: ConditionState): void {
+        condition.state = !condition.state;
 
         calculateCrit();
     }
@@ -108,6 +107,7 @@
 <h4>Pick your mods</h4>
 {#key filteredMods}
     {#each filteredMods as mod}
+        <!-- eslint-disable -->
         <button on:click={() => SelectMod(mod)} class:active={mod.state.selected}>{mod.name}</button>
         {#each mod.state.condition as condition}
         {#if condition.description && mod.state.selected}
