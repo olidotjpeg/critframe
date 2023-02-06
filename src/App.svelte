@@ -1,9 +1,7 @@
 <script lang="ts">
-  import Input from './lib/Input.svelte'
+	import Critframe from './entry/Critframe.svelte';
 </script>
 
 <main>
-  <div class="card">
-    <Input />
-  </div>
+	<Critframe />
 </main>

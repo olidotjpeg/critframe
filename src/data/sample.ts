@@ -316,7 +316,7 @@ export const weaponTypes: WeaponType[] = [
 	'buff',
 ];
 
-type WeaponType =
+export type WeaponType =
 	| 'rifle'
 	| 'shotgun'
 	| 'pistol'
