@@ -25,6 +25,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		border-bottom: 1px solid #fff;
 	}
 
 	.title {
@@ -33,20 +34,20 @@
 
 	.weaponList {
 		display: flex;
+		margin-bottom: 0;
 	}
 
 	.button {
-		margin: 0 4px;
+		border-right: 1px solid #fff;
 	}
 
 	.button:first-child {
-		margin: 0;
-		margin-right: 4px;
+		border-top-left-radius: 8px;
 	}
 
 	.button:last-child {
-		margin: 0;
-		margin-left: 4px;
+		border-right: none;
+		border-top-right-radius: 8px;
 	}
 
 	.active {
